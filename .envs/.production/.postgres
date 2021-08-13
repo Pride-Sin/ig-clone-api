@@ -1,0 +1,7 @@
+# PostgreSQL
+# ------------------------------------------------------------------------------
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=ig_clone_api
+POSTGRES_USER=LTofkFTevorjCcoyVRaGzcpvVMqrdhdF
+POSTGRES_PASSWORD=QLmiN3945nNMWsJEVJgSLi9SjtubYRqKVuSreB54JsTkiFAkpvWzNf0s4ugFfwsL

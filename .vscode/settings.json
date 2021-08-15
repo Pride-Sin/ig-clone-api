@@ -1,3 +1,9 @@
 {
-    "python.linting.pylintEnabled": true
+    "python.linting.pylintEnabled": false,
+    "python.pythonPath": "C:\\Users\\nicol\\miniconda3\\envs\\igapi\\python.exe",
+    "terminal.integrated.shell.windows": "C:\\WINDOWS\\System32\\cmd.exe",
+    "terminal.integrated.shellArgs.windows": ["/K", "C:\\Users\\nicol\\miniconda3\\Scripts\\activate.bat C:\\Users\\nicol\\miniconda3\\"],
+    "python.condaPath": "C:\\Users\\nicol\\miniconda3\\Scripts\\conda.exe",
+    "python.linting.flake8Enabled": true,
+    "python.linting.enabled": true
 }

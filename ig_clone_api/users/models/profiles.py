@@ -2,13 +2,12 @@
 
 # Django
 from django.db import models
-
 # Utils
 from ig_clone_api.utils.models import IGAPImodel
 
 
 class Profile(IGAPImodel):
-    ''' User Profile Model. '''
+    """" User Profile Model. """
 
     user = models.OneToOneField('users.User', on_delete=models.CASCADE)
 

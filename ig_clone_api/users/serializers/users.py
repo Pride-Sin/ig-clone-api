@@ -2,13 +2,14 @@
 
 # Django
 from django.conf import settings
-from django.contrib.auth import password_validation
+from django.contrib.auth import authenticate, password_validation
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils import timezone
 # Django REST Framework
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
+from rest_framework.authtoken.models import Token
 # Models
 from ig_clone_api.users.models import User, Profile
 # Serializers
@@ -34,7 +35,8 @@ class UserModelSerializer(serializers.ModelSerializer):
 
 
 class UserSignUpSerializer(serializers.Serializer):
-    """User sign up serializer.
+    """ Serializer for User sign up.
+
     Handle sign up data validation and user/profile creation.
     """
 
@@ -96,3 +98,60 @@ class UserSignUpSerializer(serializers.Serializer):
         }
         token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
         return token
+
+
+class EmailVerificationSerializer(serializers.Serializer):
+    """ Serializer for email validation.
+
+    Handle the email validation.
+    """
+
+    token = serializers.CharField()
+
+    def validate_token(self, data):
+        """ Validate the verification token. """
+        try:
+            payload = jwt.decode(data, settings.SECRET_KEY, algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise serializers.ValidationError('token expired')
+        except jwt.PyJWTError:
+            raise serializers.ValidationError('token is invalid')
+        if payload['type'] != 'email_confirmation':
+            raise serializers.ValidationError('token is invalid')
+
+        self.context['payload'] = payload
+
+        return data
+
+    def save(self):
+        """ Update user email_verified. """
+        payload = self.context['payload']
+        user = User.objects.get(username=payload['user'])
+        user.email_verified = True
+        user.save()
+
+
+class UserLoginSerializer(serializers.Serializer):
+    """ Serializer for User login.
+
+    Handle the login request.
+    """
+
+    username = serializers.CharField(max_length=150)
+    password = serializers.CharField(max_length=128)
+
+    def validate(self, data):
+        """ Validate login credentials. """
+        user = authenticate(username=data['username'], password=data['password'])
+
+        if not user:
+            raise serializers.ValidationError('Incorrect credentials.')
+        if not user.email_verified:
+            raise serializers.ValidationError('Please verify your email before login.')
+        self.context['user'] = user
+        return data
+
+    def create(self, data):
+        """ Generate/retrieve token. """
+        token, created = Token.objects.get_or_create(user=self.context['user'])
+        return self.context['user'], token.key

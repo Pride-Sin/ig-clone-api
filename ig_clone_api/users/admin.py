@@ -11,8 +11,8 @@ from ig_clone_api.users.models import Profile, User
 class CustomUserAdmin(UserAdmin):
     """User model admin."""
 
-    list_display = ('email', 'username', 'first_name', 'last_name', 'is_staff', 'email_verified')
-    list_filter = ('is_staff', 'created', 'modified', 'email_verified')
+    list_display = ('email', 'username', 'first_name', 'last_name', 'is_staff', 'email_verified', 'is_active')
+    list_filter = ('is_staff', 'created', 'modified', 'email_verified', 'is_active')
 
 
 admin.site.register(User, CustomUserAdmin)

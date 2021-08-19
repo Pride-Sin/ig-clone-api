@@ -1,4 +1,4 @@
-""" Profile model. """
+""" Profile models. """
 
 # Django
 from django.db import models
@@ -10,14 +10,12 @@ class Profile(IGAPImodel):
     """" User Profile Model. """
 
     user = models.OneToOneField('users.User', on_delete=models.CASCADE)
-
     picture = models.ImageField(
         'profile picture',
         upload_to='users/pictures/',
         blank=True,
         null=True,
     )
-
     biography = models.CharField(
         'profile biography',
         blank=True,

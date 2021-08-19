@@ -45,7 +45,6 @@ class UserSignUpSerializer(serializers.Serializer):
         max_length=20,
         validators=[UniqueValidator(queryset=User.objects.all())]
     )
-
     email = serializers.EmailField(
         validators=[UniqueValidator(queryset=User.objects.all())]
     )

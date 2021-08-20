@@ -12,7 +12,11 @@ class Photo(IGAPImodel):
     This model represents the photos uploaded.
     """
 
-    user = models.ForeignKey('users.User', on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        'users.User',
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,)
     image = models.ImageField(
         'photo',
         upload_to='photos/',

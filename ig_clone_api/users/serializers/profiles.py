@@ -2,7 +2,6 @@
 
 # Django REST Framework
 from rest_framework import serializers
-
 # Models
 from ig_clone_api.users.models import Profile
 

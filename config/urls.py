@@ -15,6 +15,7 @@ urlpatterns = [
     path('api-token-auth/', views.obtain_auth_token),
     # Views
     path('', include(('ig_clone_api.users.urls', 'users'), namespace='users')),
+    path('', include(('ig_clone_api.photos.urls', 'photos'), namespace='photos')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

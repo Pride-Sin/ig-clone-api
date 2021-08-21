@@ -12,7 +12,7 @@ from rest_framework.permissions import (
 )
 from ig_clone_api.users.permissions import IsAccountOwner
 # Filters
-import django_filters.rest_framework
+from rest_framework.filters import SearchFilter, OrderingFilter
 # Serializers
 from ig_clone_api.users.serializers.users import (
     UserSignUpSerializer,
@@ -35,12 +35,21 @@ class UserViewSet(mixins.RetrieveModelMixin,
     Handle sign up, account verification, login,
     profile and user update, retrieve and destroy.
     """
-    queryset = User.objects.filter(is_active=True)
+
     serializer_class = UserModelSerializer
     lookup_field = 'username'
+
     # Filters
-    filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
+    filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ('username', 'email', 'first_name', 'last_name')
+    ordering_fields = ('first_name', 'last_name')
+
+    def get_queryset(self):
+        """Restrict list to public-only."""
+        queryset = User.objects.all()
+        if self.action == 'list':
+            return queryset.filter(is_active=True)
+        return queryset
 
     def get_permissions(self):
         """Assign permissions based on action."""
@@ -121,11 +130,6 @@ class UserViewSet(mixins.RetrieveModelMixin,
         }
         response.data = data
         return response
-
-    def list(self, request):
-        """ List all the users. """
-        serializer = UserModelSerializer(self.queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def perform_destroy(self, instance):
         """Disable user instead of deleting."""

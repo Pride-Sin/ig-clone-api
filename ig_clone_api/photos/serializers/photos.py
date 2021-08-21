@@ -16,8 +16,7 @@ class PhotoModelSerializer(serializers.ModelSerializer):
 
         model = Photo
         fields = ('user', 'image', 'description', 'total_likes', 'total_comments')
-        #! May need to delete image from read_only_fields if creating an account dont work.
-        read_only_fields = ('user', 'image', 'total_likes', 'total_comments')
+        read_only_fields = ('user', 'total_likes', 'total_comments')
 
 
 class UpdateDescriptionSerializer(serializers.ModelSerializer):

@@ -7,6 +7,9 @@ from rest_framework.response import Response
 from ig_clone_api.photos.serializers.photos import PhotoModelSerializer, UpdateDescriptionSerializer
 # Models
 from ig_clone_api.photos.models.photos import Photo
+# Permissions
+from rest_framework.permissions import IsAuthenticated
+from ig_clone_api.photos.permissions import IsPhotoOwner
 
 
 class PhotoViewSet(mixins.RetrieveModelMixin,
@@ -21,6 +24,14 @@ class PhotoViewSet(mixins.RetrieveModelMixin,
 
     queryset = Photo.objects.all()
     serializer_class = PhotoModelSerializer
+
+    def get_permissions(self):
+        """Assign permissions based on action."""
+        if self.action in ['partial_update', 'destroy']:
+            permissions = [IsAuthenticated, IsPhotoOwner]
+        else:
+            permissions = [IsAuthenticated]
+        return [p() for p in permissions]
 
     def perfom_create(self, serializer):
         """ Upload a new photo. """

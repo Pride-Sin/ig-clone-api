@@ -12,20 +12,20 @@ class PhotoAdmin(admin.ModelAdmin):
     """ Photo model admin."""
 
     list_display = ('id', 'user', 'image', 'description', 'total_likes', 'total_likes')
-    search_fields = ('user',)
+    search_fields = ('id', 'user',)
 
 
 @admin.register(Like)
 class LikeAdmin(admin.ModelAdmin):
     """ Like model admin."""
 
-    list_display = ('user', 'photo')
-    search_fields = ('user', 'photo')
+    list_display = ('id', 'user', 'photo')
+    search_fields = ('id', 'user', 'photo')
 
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
     """ Comment model admin."""
 
-    list_display = ('user', 'photo', 'comment')
-    search_fields = ('user', 'photo', 'comment')
+    list_display = ('id', 'user', 'photo', 'comment')
+    search_fields = ('id', 'user', 'photo', 'comment')

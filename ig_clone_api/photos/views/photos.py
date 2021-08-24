@@ -19,7 +19,7 @@ class PhotoViewSet(mixins.RetrieveModelMixin,
                    viewsets.GenericViewSet):
     """ PhotoViewSet
 
-    Handle upload (create) and delete of photos.
+    Handle create, delete, partial update and retrieve of photos.
     """
 
     queryset = Photo.objects.all()
@@ -35,7 +35,9 @@ class PhotoViewSet(mixins.RetrieveModelMixin,
 
     def perfom_create(self, serializer):
         """ Upload a new photo. """
+        serializer.is_valid(raise_exception=True)
         serializer.save()
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
 
     def perform_destroy(self, instance):
         """ Delete a photo. """
@@ -60,4 +62,4 @@ class PhotoViewSet(mixins.RetrieveModelMixin,
         serializer.is_valid(raise_exception=True)
         serializer.save()
         serializer2 = PhotoModelSerializer(instance)
-        return Response(data=serializer2.data, status=status.HTTP_202_ACCEPTED)
+        return Response(data=serializer2.data, status=status.HTTP_200_OK)

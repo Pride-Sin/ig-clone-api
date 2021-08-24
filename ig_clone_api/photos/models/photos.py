@@ -16,7 +16,8 @@ class Photo(IGAPImodel):
         'users.User',
         on_delete=models.CASCADE,
         blank=True,
-        null=True,)
+        null=True,
+    )
     image = models.ImageField(
         'photo',
         upload_to='photos/',
@@ -46,7 +47,12 @@ class Comment(IGAPImodel):
     This model represent each comment writed.
     """
 
-    user = models.ForeignKey('users.User', on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        'users.User',
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
     photo = models.ForeignKey('Photo', on_delete=models.CASCADE)
     comment = models.CharField(
         'comment',

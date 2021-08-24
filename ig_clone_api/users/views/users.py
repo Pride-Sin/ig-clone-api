@@ -1,9 +1,8 @@
 """ User views. """
 
 # Django REST Framework
+from rest_framework import mixins, status, viewsets
 from rest_framework.response import Response
-from rest_framework import status
-from rest_framework import mixins, viewsets
 from rest_framework.decorators import action
 # Permissions
 from rest_framework.permissions import (

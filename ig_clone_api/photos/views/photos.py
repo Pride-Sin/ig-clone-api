@@ -19,7 +19,7 @@ class PhotoViewSet(mixins.RetrieveModelMixin,
                    viewsets.GenericViewSet):
     """ PhotoViewSet
 
-    Handle create, delete, partial update and retrieve of photos.
+    Handle create, delete, list, partial update and retrieve of photos.
     """
 
     queryset = Photo.objects.all()

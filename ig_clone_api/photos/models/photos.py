@@ -33,7 +33,6 @@ class Photo(IGAPImodel):
 
 class Like(IGAPImodel):
     """ Likes model.
-
     This model represents each like a user gives.
     """
 
@@ -43,7 +42,6 @@ class Like(IGAPImodel):
 
 class Comment(IGAPImodel):
     """ Comments model.
-
     This model represent each comment writed.
     """
 

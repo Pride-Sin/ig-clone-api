@@ -21,13 +21,12 @@ class CommentViewSet(mixins.RetrieveModelMixin,
                      viewsets.GenericViewSet):
     """ CommentViewSet
 
-    Handle create, delete, partial update and retrieve of photos.
+    Handle create, delete, list and retrieve of comments.
     """
 
     serializer_class = CommentModelSerializer
 
     def get_queryset(self):
-        """Restrict list to public-only."""
         queryset = Comment.objects.all()
         if self.action == 'destroy':
             return queryset.filter(id=self.kwargs['pk'])
@@ -52,8 +51,8 @@ class CommentViewSet(mixins.RetrieveModelMixin,
         try:
             queryset = Comment.objects.get(pk=pk, photo=photo_pk)
         except ObjectDoesNotExist:
-            data = {'message': "The comment doesn't exist in this photo."}
-            return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
+            data = {'detail': "The comment doesn't exist in this photo."}
+            return Response(data=data, status=status.HTTP_404_NOT_FOUND)
 
         serializer = CommentModelSerializer(queryset)
         return Response(data=serializer.data, status=status.HTTP_200_OK)

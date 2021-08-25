@@ -9,7 +9,7 @@ from rest_framework.permissions import (
     AllowAny,
     IsAuthenticated
 )
-from ig_clone_api.users.permissions import IsAccountOwner
+from ig_clone_api.permissions import IsObjectOwner
 # Filters
 from rest_framework.filters import SearchFilter, OrderingFilter
 # Serializers
@@ -44,7 +44,7 @@ class UserViewSet(mixins.RetrieveModelMixin,
     ordering_fields = ('first_name', 'last_name')
 
     def get_queryset(self):
-        """Restrict list to public-only."""
+        """Restrict list to active-only."""
         queryset = User.objects.all()
         if self.action == 'list':
             return queryset.filter(is_active=True)
@@ -55,7 +55,7 @@ class UserViewSet(mixins.RetrieveModelMixin,
         if self.action in ['signup', 'login', 'verify']:
             permissions = [AllowAny]
         elif self.action in ['retrieve', 'update', 'partial_update', 'destroy', 'u', 'p']:
-            permissions = [IsAuthenticated, IsAccountOwner]
+            permissions = [IsAuthenticated, IsObjectOwner]
         else:
             permissions = [IsAuthenticated]
         return [p() for p in permissions]
@@ -127,8 +127,7 @@ class UserViewSet(mixins.RetrieveModelMixin,
         data = {
             'user': response.data,
         }
-        response.data = data
-        return response
+        return Response(data=data, status=status.HTTP_200_OK)
 
     def perform_destroy(self, instance):
         """Disable user instead of deleting."""

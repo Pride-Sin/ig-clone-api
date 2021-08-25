@@ -9,7 +9,7 @@ from ig_clone_api.photos.serializers.photos import PhotoModelSerializer, UpdateD
 from ig_clone_api.photos.models.photos import Photo
 # Permissions
 from rest_framework.permissions import IsAuthenticated
-from ig_clone_api.photos.permissions import IsPhotoOwner
+from ig_clone_api.permissions import IsObjectOwner
 
 
 class PhotoViewSet(mixins.RetrieveModelMixin,
@@ -28,7 +28,7 @@ class PhotoViewSet(mixins.RetrieveModelMixin,
     def get_permissions(self):
         """Assign permissions based on action."""
         if self.action in ['partial_update', 'destroy']:
-            permissions = [IsAuthenticated, IsPhotoOwner]
+            permissions = [IsAuthenticated, IsObjectOwner]
         else:
             permissions = [IsAuthenticated]
         return [p() for p in permissions]

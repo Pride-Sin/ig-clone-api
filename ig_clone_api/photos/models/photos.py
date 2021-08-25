@@ -53,8 +53,10 @@ class Comment(IGAPImodel):
         blank=True,
         null=True,
     )
-    photo = models.ForeignKey('Photo', on_delete=models.CASCADE)
-    comment = models.CharField(
-        'comment',
-        max_length=255,
+    photo = models.ForeignKey(
+        'Photo',
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
     )
+    comment = models.CharField('comment', max_length=255)

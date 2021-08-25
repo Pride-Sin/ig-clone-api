@@ -9,6 +9,7 @@ from ig_clone_api.photos.serializers.comments import CommentModelSerializer
 from ig_clone_api.photos.models.photos import Comment
 # Permissions
 from rest_framework.permissions import IsAuthenticated
+from ig_clone_api.permissions import IsObjectOwner
 # Exceptions
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -24,6 +25,21 @@ class CommentViewSet(mixins.RetrieveModelMixin,
     """
 
     serializer_class = CommentModelSerializer
+
+    def get_queryset(self):
+        """Restrict list to public-only."""
+        queryset = Comment.objects.all()
+        if self.action == 'destroy':
+            return queryset.filter(id=self.kwargs['pk'])
+        return queryset
+
+    def get_permissions(self):
+        """Assign permissions based on action."""
+        if self.action in ['destroy']:
+            permissions = [IsAuthenticated, IsObjectOwner]
+        else:
+            permissions = [IsAuthenticated]
+        return [p() for p in permissions]
 
     def list(self, request, photo_pk=None):
         """ Show all the comments of a photo. """
@@ -45,5 +61,12 @@ class CommentViewSet(mixins.RetrieveModelMixin,
     def perform_create(self, serializer, photo_pk=None):
         """ Create a new comment. """
         serializer.is_valid(raise_exception=True)
-        serializer.save(context={'photo_pk': photo_pk})
+        serializer.save()
         return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+    def perform_destroy(self, instance):
+        """ Delete a comment. """
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+

@@ -51,7 +51,7 @@ class CommentViewSet(mixins.RetrieveModelMixin,
         try:
             queryset = Comment.objects.get(pk=pk, photo=photo_pk)
         except ObjectDoesNotExist:
-            data = {'detail': "The comment doesn't exist in this photo."}
+            data = {'detail': ["The comment doesn't exist in this photo."]}
             return Response(data=data, status=status.HTTP_404_NOT_FOUND)
 
         serializer = CommentModelSerializer(queryset)

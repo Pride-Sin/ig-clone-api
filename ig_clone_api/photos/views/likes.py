@@ -44,19 +44,23 @@ class LikeViewSet(mixins.RetrieveModelMixin,
         """ Show all the likes of a photo. """
         queryset = Like.objects.filter(photo=photo_pk)
         if not queryset:
-            return Response(data={'detail': "The photo doesn't exist."}, status=status.HTTP_404_NOT_FOUND)
+            return Response(data={'detail': ["The photo doesn't exist."]}, status=status.HTTP_404_NOT_FOUND)
         serializer = LikeModelSerializer(queryset, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
     def perform_create(self, serializer):
-        """ Creates a new like. """
+        """ Creates a new like.
+
+        The substraction in the total_likes is made in the serializer.
+        """
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
-    def perform_destroy(self, instance, photo_pk=None):
+    def perform_destroy(self, instance):
         """ Deletes a like and substract 1 to total_likes of the photo. """
-        photo = Photo.objects.get(id=photo_pk)
+        photo = Photo.objects.get(id=self.kwargs['photo_pk'])
         photo.total_likes -= 1
+        photo.save()
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

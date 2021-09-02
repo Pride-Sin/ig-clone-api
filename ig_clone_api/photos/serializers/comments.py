@@ -19,6 +19,15 @@ class CommentModelSerializer(serializers.ModelSerializer):
         fields = ('user', 'photo', 'comment')
         read_only_fields = ('user',)
 
+    def validate(self, attrs):
+        photo_pk = self.context['view'].kwargs["photo_pk"]
+        try:
+            photo = Photo.objects.get(id=photo_pk)
+        except Photo.DoesNotExist:
+            raise serializers.ValidationError({"detail": "The photo doesn't exist"})
+        attrs["photo"] = photo
+        return attrs
+
     def create(self, validated_data):
         # Get the photo pk from the view context (DRF-nested-routers) and
         # create the new comment with the validated_data

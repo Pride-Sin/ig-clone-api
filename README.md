@@ -9,7 +9,7 @@
 This API tries to replicate the functions of Instagram.
 
 #### Authentication
-The API uses the [Django TokenAuthentication](https://www.django-rest-framework.org/api-guide/authentication/#tokenauthentication "Django TokenAuthentication") system.
+The API uses the [DRF TokenAuthentication](https://www.django-rest-framework.org/api-guide/authentication/#tokenauthentication "Django TokenAuthentication") system.
 
 #### Status Codes
 (They can be more than those listed, subject to change)

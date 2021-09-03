@@ -18,15 +18,19 @@ The API uses the [Django TokenAuthentication](https://www.django-rest-framework.
 | ------------ | ------------ |
 | 200 | `OK` |
 | 201 | `CREATED` |
-| 204 | `NOT CONTENT` |
+| 204 | `NO CONTENT` |
 | 400 | `BAD REQUEST` |
 | 403 | `FORBIDDEN` |
 | 404 | `NOT FOUND` |
 | 500 | `INTERNAL SERVER ERROR` |
 
 
+#### Response behaviour
+The response can contain data as a value (text or list) of the `'detail'` key.
 
-The response can contain data with a `'detail'` key with a list containing the description of the problem (in index 0).
+When creating or updating a resource (user/photo/comment/like) if the object is created (`201 CREATED`) it will always return the created/updated object. 
+
+When deleting, the response will only be a `204 NO CONTENT` and no data will return.
 
 Example:
 `{'detail': ["The photo doesn't exist."] }`

@@ -33,4 +33,6 @@ class CommentModelSerializer(serializers.ModelSerializer):
         # create the new comment with the validated_data
         photo = Photo.objects.get(pk=self.context["view"].kwargs["photo_pk"])
         validated_data["photo"] = photo
+        photo.total_comments += 1
+        photo.save()
         return Comment.objects.create(**validated_data)

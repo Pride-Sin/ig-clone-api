@@ -6,7 +6,7 @@ from rest_framework.response import Response
 # Serializer
 from ig_clone_api.photos.serializers.comments import CommentModelSerializer
 # Models
-from ig_clone_api.photos.models.photos import Comment
+from ig_clone_api.photos.models.photos import Comment, Photo
 # Permissions
 from rest_framework.permissions import IsAuthenticated
 from ig_clone_api.permissions import IsObjectOwner
@@ -65,6 +65,9 @@ class CommentViewSet(mixins.RetrieveModelMixin,
 
     def perform_destroy(self, instance):
         """ Delete a comment. """
+        photo = Photo.objects.get(id=self.kwargs['photo_pk'])
+        photo.total_comments -= 1
+        photo.save()
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 

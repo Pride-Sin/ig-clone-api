@@ -9,7 +9,7 @@ from rest_framework.permissions import (
     AllowAny,
     IsAuthenticated
 )
-from ig_clone_api.permissions import IsObjectOwner
+from ig_clone_api.permissions import IsAccountOwner
 # Filters
 from rest_framework.filters import SearchFilter, OrderingFilter
 # Serializers
@@ -55,7 +55,7 @@ class UserViewSet(mixins.RetrieveModelMixin,
         if self.action in ['signup', 'login', 'verify']:
             permissions = [AllowAny]
         elif self.action in ['retrieve', 'update', 'partial_update', 'destroy', 'u', 'p']:
-            permissions = [IsAuthenticated, IsObjectOwner]
+            permissions = [IsAuthenticated, IsAccountOwner]
         else:
             permissions = [IsAuthenticated]
         return [p() for p in permissions]

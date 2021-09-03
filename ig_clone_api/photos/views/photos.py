@@ -10,6 +10,8 @@ from ig_clone_api.photos.models.photos import Photo
 # Permissions
 from rest_framework.permissions import IsAuthenticated
 from ig_clone_api.permissions import IsObjectOwner
+# Filters
+from rest_framework.filters import SearchFilter, OrderingFilter
 
 
 class PhotoViewSet(mixins.RetrieveModelMixin,
@@ -21,9 +23,12 @@ class PhotoViewSet(mixins.RetrieveModelMixin,
 
     Handle create, delete, list, partial update and retrieve of photos.
     """
-
     queryset = Photo.objects.all()
     serializer_class = PhotoModelSerializer
+
+    # Filters
+    filter_backends = (SearchFilter, OrderingFilter)
+    search_fields = ('user__username', )
 
     def get_permissions(self):
         """Assign permissions based on action."""
@@ -32,6 +37,12 @@ class PhotoViewSet(mixins.RetrieveModelMixin,
         else:
             permissions = [IsAuthenticated]
         return [p() for p in permissions]
+
+    def list(self, request):
+        """ Show a list of photos. """
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = PhotoModelSerializer(queryset, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
 
     def perfom_create(self, serializer):
         """ Upload a new photo. """

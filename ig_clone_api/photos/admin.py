@@ -11,8 +11,8 @@ from ig_clone_api.photos.models import Photo, Comment, Like
 class PhotoAdmin(admin.ModelAdmin):
     """ Photo model admin."""
 
-    list_display = ('id', 'user', 'image', 'description', 'total_likes', 'total_comments')
-    search_fields = ('id', 'user',)
+    list_display = ('id', 'user', 'image', 'description', 'total_likes', 'total_comments', 'created')
+    search_fields = ('id', 'user')
 
 
 @admin.register(Like)

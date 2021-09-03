@@ -217,6 +217,31 @@ Anyone who is logged in can retrieve a photo.
 | ------------ | ------------ |
 | authorization | token `user token` |
 
+#### List photos
+```http
+GET /photos/
+```
+This will get a list of all the photos, filters can be applied as query strings.
+
+```
+[
+    {
+        "user": "Foo",
+        "image": "/media/photos/225953.jpg",
+        "description": "This is a description",
+        "total_likes": 31,
+        "total_comments": 7
+    },
+	...
+]
+```
+
+For filtering the following parameters can be aplied in the url:
+
+| Filter by | Value |
+| ------------ | ------------ |
+| Search | `username` |
+
 #### Update photo description
 ```http
 PATCH /photos/'id'/
